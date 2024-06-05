@@ -1,6 +1,24 @@
 <template>
-  <v-app>
+  <v-app style="padding: 50px">
     <v-container fluid>
+      <v-btn
+        v-if="$auth.user.user_role === 'admin'"
+        depressed
+        @click="action='add'; assetDetail = {}; dialog = true"
+        color="primary"
+      >
+        Add asset
+      </v-btn>
+      <v-btn
+        v-if="$auth.user.user_role === 'admin'"
+        depressed
+        @click="scannerDialog = true;"
+        color="primary"
+      >
+        Qr Scanner
+      </v-btn>
+      <br>
+      <br>
       <v-row>
         <v-col cols="12">
           <v-card>
@@ -10,8 +28,35 @@
                 <template v-slot:item.actions="{ item }">
                   <v-icon
                     small
+                    v-if="$auth.user.user_role === 'admin'"
                     class="mr-2"
-                    @click="assetDetail = item; dialog = true"
+                    color="blue"
+                    @click="assetDetail = item; qrDialog = true; generateQRCode()"
+                  >
+                    mdi-qrcode
+                  </v-icon>
+                  <v-icon
+                    small
+                    v-if="$auth.user.user_role === 'admin'"
+                    class="mr-2"
+                    color="blue"
+                    @click="action = 'edit'; assetDetail = item; dialog = true"
+                  >
+                    mdi-pencil
+                  </v-icon>
+                  <v-icon
+                    small
+                    class="mr-2"
+                    v-if="$auth.user.user_role === 'admin'"
+                    color="red"
+                    @click="assetDetail = item; deleteProduct()"
+                  >
+                    mdi-delete
+                  </v-icon>
+                  <v-icon
+                    small
+                    class="mr-2"
+                    @click="action='view'; assetDetail = item; dialog = true"
                   >
                     mdi-eye
                   </v-icon>
@@ -36,41 +81,50 @@
           <v-card-text>
             <v-text-field
               label="Code"
-              :value="assetDetail.product_code"
-              readonly
+              v-model="assetDetail.product_code"
+              :readonly="action === 'view'"
             ></v-text-field>
             <v-text-field
               label="Name"
-              :value="assetDetail.product_name"
-              readonly
+              v-model="assetDetail.product_name"
+              :readonly="action === 'view'"
             ></v-text-field>
             <v-text-field
               label="Description"
-              :value="assetDetail.product_description"
-              readonly
+              v-model="assetDetail.product_description"
+              :readonly="action === 'view'"
             ></v-text-field>
             <v-text-field
               label="Category"
-              :value="assetDetail.product_category"
-              readonly
+              v-model="assetDetail.product_category"
+              :readonly="action === 'view'"
             ></v-text-field>
             <v-text-field
               label="Available Quantity"
-              :value="assetDetail.product_quantity"
-              readonly
+              v-model="assetDetail.product_quantity"
+              :readonly="action === 'view'"
             ></v-text-field>
           </v-card-text>
 
           <v-divider></v-divider>
 
-          <v-card-actions v-if="$auth.user.user_role === 'user'">
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
+              v-if="action === 'view' && $auth.user.user_role === 'user'"
               color="primary"
               text
               @click="dialog1 = true"
             >
               Borrow now
+            </v-btn>
+            <v-btn
+              v-if="action === 'edit' || action === 'add'"
+              color="primary"
+              text
+              @click="action === 'edit' ? editProduct() : addProduct()"
+            >
+              {{action === 'edit' ? 'Edit' : 'Add'}}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -131,11 +185,11 @@
       >
         <v-card>
           <v-card-title class="text-h5 grey lighten-2">
-            Privacy Policy
+            Terms and Conditions
           </v-card-title>
+          <br>
 
-          <v-card-text><br>
-            Terms and Conditions: <br><br>
+          <v-card-text>
             1. The Borrower should be a bona fide student or employee of SNC. A valid ID must be presented upon borrowing. <br>
             2. The Borrower's slip should be submitted at least two (2) working days before the date of use. <br>
             3. All equipment are checked and tested before issuing to Borrower to ensure functionality. <br>
@@ -158,6 +212,23 @@
         </v-card>
       </v-dialog>
 
+      <v-dialog
+        v-model="qrDialog"
+        width="500"
+      >
+        <v-card>
+          <v-card-title class="text-h5 grey lighten-2">
+            Generate QRcode
+          </v-card-title>
+
+          <div class="qr-code-generator" align="center">
+            <canvas ref="qrCanvas" style="display: none;"></canvas>
+            <img style="height: 145px; width: 145px" v-if="qrCodeDataUrl" :src="qrCodeDataUrl" alt="QR Code" /><br><br>
+            <v-btn @click="downloadQRCode" color="primary" :disabled="!qrCodeDataUrl">Download QR Code</v-btn> <br><br>
+          </div>
+        </v-card>
+      </v-dialog>
+
       <v-snackbar top right color="green" v-model="snackbar">
         Successfully submitted!
 
@@ -168,16 +239,53 @@
         </template>
       </v-snackbar>
 
+      <v-dialog
+        v-model="scannerDialog"
+        width="500"
+      >
+        <v-card>
+          <v-card-title class="text-h5 grey lighten-2">
+            QRCode Scanner
+          </v-card-title>
+
+          <div class="qr-code-generator" align="center">
+             <video style="height: 100%; width: 100%" ref="videoElem"></video>
+              <v-btn
+                depressed
+                @click="startQR()"
+                color="primary"
+              >
+                Start
+              </v-btn>
+              <v-btn
+                depressed
+                @click="stopQR()"
+                color="primary"
+              >
+                Stop
+              </v-btn>
+          </div>
+          <br>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>
 
 <script>
+import QrScanner from 'qr-scanner';
+import QRCode from 'qrcode';
+import { saveAs } from 'file-saver';
+
 export default {
   name: "IndexPage",
   layout: "user",
   data() {
     return {
+      scannerDialog: false,
+      qrDialog: false,
+      qrCodeDataUrl: '',
+      action: '',
       snackbar: false,
       assetDetail: {},
       termsAndCondition: false,
@@ -238,44 +346,148 @@ export default {
     this.getProductList();
   },
   methods: {
+    startQR(detectedCodes) {
+      const videoElem = this.$refs.videoElem;
+      const qrScanner = new QrScanner(
+        videoElem,
+        result => {
+          console.log('decoded qr code:', result)
+          let url = `/api/product-tables?filters[product_code][$eq]=${result.data}`
+
+          this.$axios
+            .get(url)
+            .then((response) => {
+              console.log('ress', response);
+              // this.productList = response.data.data;
+              this.scannerDialog = false
+              this.action = 'view'
+              this.assetDetail = response.data.data[0]
+              this.dialog = true
+            })
+            .catch((error) => {
+              console.log("error");
+            });
+
+        },
+        { /* your options or returnDetailedScanResult: true if you're not specifying any other options */ },
+      );
+      qrScanner.start();
+      // qrScanner.stop();
+    },
+    stopQR () {
+      const videoElem = this.$refs.videoElem;
+      const qrScanner = new QrScanner(
+        videoElem,
+        result => console.log('decoded qr code:', result),
+        { /* your options or returnDetailedScanResult: true if you're not specifying any other options */ },
+      );
+      // qrScanner.start();
+      qrScanner.stop();
+      qrScanner.destroy();
+      this.scannerDialog = false
+      // qrScanner = null;
+    },
+    generateQRCode() {
+      QRCode.toDataURL(this.assetDetail.product_code, { errorCorrectionLevel: 'H' })
+        .then((url) => {
+          this.qrCodeDataUrl = url;
+          const canvas = this.$refs.qrCanvas;
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          img.src = url;
+          img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+          };
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    downloadQRCode() {
+      if (!this.qrCodeDataUrl) return;
+      const canvas = this.$refs.qrCanvas;
+      canvas.toBlob((blob) => {
+        saveAs(blob, 'qrcode.png');
+      });
+    },
+    editProduct() {
+      let payload = {
+        data: {
+          product_code: this.assetDetail.product_code,
+          product_name: this.assetDetail.product_name,
+          product_description: this.assetDetail.product_description,
+          product_category: this.assetDetail.product_category,
+          product_quantity: this.assetDetail.product_quantity,
+        },
+      };
+      this.$axios.put(`/api/product-tables/${this.assetDetail.id}`, payload).then((response) => {
+        this.dialog = false;
+        this.getProductList();
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    addProduct() {
+      let payload = {
+        data: {
+          product_code: this.assetDetail.product_code,
+          product_name: this.assetDetail.product_name,
+          product_description: this.assetDetail.product_description,
+          product_category: this.assetDetail.product_category,
+          product_quantity: this.assetDetail.product_quantity,
+        },
+      };
+      this.$axios.post("/api/product-tables", payload).then((response) => {
+        this.dialog = false;
+        this.getProductList();
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    deleteProduct() {
+      this.$axios.delete(`/api/product-tables/${this.assetDetail.id}`).then((response) => {
+        this.getProductList();
+      }).catch((error) => {
+        console.log("error");
+      });
+    },
     getProductList() {
       this.$axios
         .get("/api/product-tables")
         .then((response) => {
-          console.log('ress', response);
           this.productList = response.data.data;
         })
         .catch((error) => {
           console.log("error");
         });
-      },
-      submit() {
-        console.log('$auth.user', this.$auth.user)
-        let payload = {
-          data: {
-            product_table: this.assetDetail.id,
-            user: this.$auth.user.id,
-            quantity: this.quantity,
-            remarks: this.remarks,
-            room: this.room,
-            status: "Pending"
-          },
-        };
-        console.log('payloadpayload', payload)
-        this.$axios
-          .post("/api/borrowed-tables", payload)
-          .then((response) => {
-            this.snackbar = true
-            this.dialog = false
-            this.dialog1 = false
-            this.quantity = 0
-            this.room = ''
-            this.remarks = ''
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
     },
+    submit() {
+      let payload = {
+        data: {
+          product_table: this.assetDetail.id,
+          user: this.$auth.user.id,
+          quantity: this.quantity,
+          remarks: this.remarks,
+          room: this.room,
+          status: "Pending"
+        },
+      };
+      this.$axios
+        .post("/api/borrowed-tables", payload)
+        .then((response) => {
+          this.snackbar = true;
+          this.dialog = false;
+          this.dialog1 = false;
+          this.quantity = 0;
+          this.room = '';
+          this.remarks = '';
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  },
 }
 </script>

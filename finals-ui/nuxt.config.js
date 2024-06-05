@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+
 const lightTheme = {
   primary: "#2196F3", // change header color from here || "#1e88e6", "#21c1d6", "#fc4b6c", "#563dea", "#9C27b0", "#ff9800"
   info: "#21c1d6",
@@ -45,6 +46,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    // '~/plugins/qr'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

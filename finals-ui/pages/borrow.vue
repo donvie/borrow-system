@@ -1,6 +1,94 @@
 <template>
   <v-app>
-    <v-container fluid>
+    <v-row style="padding: 50px">
+      <v-col cols="3">
+        <v-card
+          color="#385F73"
+          dark
+        >
+          <v-card-title class="text-h5">
+            All
+          </v-card-title>
+          <v-card-actions>
+            <v-btn text style="font-size: 32px">
+              {{all}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="3">
+        <v-card
+          color="blue"
+          dark
+        >
+          <v-card-title class="text-h5">
+            Pending
+          </v-card-title>
+
+
+          <v-card-actions>
+            <v-btn text style="font-size: 32px">
+              
+            {{pending}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="3">
+        <v-card
+          color="orange"
+          dark
+        >
+          <v-card-title class="text-h5">
+            Released
+          </v-card-title>
+
+          <v-card-actions>
+            <v-btn text style="font-size: 32px">
+              {{release}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="3">
+        <v-card
+          color="green"
+          dark
+        >
+          <v-card-title class="text-h5">
+            Returned
+          </v-card-title>
+
+          <v-card-actions>
+            <v-btn text style="font-size: 32px">
+              {{returned}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="3">
+        <v-card
+          color="red"
+          dark
+        >
+          <v-card-title class="text-h5">
+            Declined
+          </v-card-title>
+
+          <v-card-actions>
+            <v-btn text style="font-size: 32px">
+              {{declined}}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-container fluid style="padding-left: 50px; padding-right: 50px">
       <v-row>
         <v-col cols="4">
           <v-select
@@ -69,15 +157,15 @@
                     readonly
                   ></v-text-field>
                   <v-text-field
-                    v-if="assetDetail.dateReleased"
+                    v-if="assetDetail.timeReleased"
                     label="Date / Time Released"
                     :value="`${assetDetail.dateReleased} ${assetDetail.timeReleased}`"
                     readonly
                   ></v-text-field>
                   <v-text-field
-                    v-if="assetDetail.dateReleased"
+                    v-if="assetDetail.timeReturned"
                     label="Date / Time Returned"
-                    :value="`${assetDetail.dateReleased} ${assetDetail.timeReleased}`"
+                    :value="`${assetDetail.dateReturned} ${assetDetail.timeReturned}`"
                     readonly
                   ></v-text-field>
                   <v-text-field
@@ -172,7 +260,7 @@
             </v-btn>
             <v-btn
               color="primary"
-              :disabled="assetDetail.status === 'Declined' || assetDetail.status === 'Returned'"
+              :disabled="assetDetail.status !== 'Released'"
               text
               @click="action= 'Return'; dialog3 = true"
             >
@@ -375,6 +463,11 @@ export default {
   layout: "borrow",
   data() {
     return {
+      all: 0,
+      pending: 0,
+      declined: 0,
+      release: 0,
+      returned: 0,
       snackbar: false,
       tab: 'tab-1',
       assetDetail: {},
@@ -403,7 +496,7 @@ export default {
           text: "Name",
           align: "start",
           sortable: false,
-          value: "user.username",
+          value: "user.name",
         },
         {
           text: "Item Name",
@@ -444,8 +537,88 @@ export default {
   },
   mounted() {
     this.getProductList();
+    this.allDashboard()
+    this.pendingDashboard()
+    this.returnDashboard()
+    this.releaseDashboard()
+    this.declinedDashboard()
   },
   methods: {
+    declinedDashboard () {
+      let url = ''
+      if(this.$auth.user.user_role === 'admin') {
+        url = `/api/borrowed-tables?filters[status][$eq]=Declined&populate=*&sort=updatedAt:desc`
+      } else {
+        url = `/api/borrowed-tables?filters[status][$eq]=Declined&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+      }
+
+      this.$axios.get(url).then((response) => {
+        console.log('ress', response);
+        this.declined = response.data.data.length;
+      }).catch((error) => {
+        console.log("error");
+      });
+    },
+    releaseDashboard () {
+      let url = ''
+      if(this.$auth.user.user_role === 'admin') {
+        url = `/api/borrowed-tables?filters[status][$eq]=Released&populate=*&sort=updatedAt:desc`
+      } else {
+        url = `/api/borrowed-tables?filters[status][$eq]=Released&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+      }
+
+      this.$axios.get(url).then((response) => {
+        console.log('ress', response);
+        this.release = response.data.data.length;
+      }).catch((error) => {
+        console.log("error");
+      });
+    },
+    returnDashboard () {
+      let url = ''
+      if(this.$auth.user.user_role === 'admin') {
+        url = `/api/borrowed-tables?filters[status][$eq]=Returned&populate=*&sort=updatedAt:desc`
+      } else {
+        url = `/api/borrowed-tables?filters[status][$eq]=Returned&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+      }
+
+      this.$axios.get(url).then((response) => {
+        console.log('ress', response);
+        this.returned = response.data.data.length;
+      }).catch((error) => {
+        console.log("error");
+      });
+    },
+    pendingDashboard() {
+      let url = ''
+      if(this.$auth.user.user_role === 'admin') {
+        url = `/api/borrowed-tables?filters[status][$eq]=Pending&populate=*&sort=updatedAt:desc`
+      } else {
+        url = `/api/borrowed-tables?filters[status][$eq]=Pending&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+      }
+
+      this.$axios.get(url).then((response) => {
+        console.log('ress', response);
+        this.pending = response.data.data.length;
+      }).catch((error) => {
+        console.log("error");
+      });
+    },
+    allDashboard () {
+      let url = ''
+      if(this.$auth.user.user_role === 'admin') {
+        url = `/api/borrowed-tables?populate=*&sort=updatedAt:desc`
+      } else {
+        url = `/api/borrowed-tables?filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+      }
+
+      this.$axios.get(url).then((response) => {
+        console.log('ress', response);
+        this.all = response.data.data.length;
+      }).catch((error) => {
+        console.log("error");
+      });
+    },
     getProductList() {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
