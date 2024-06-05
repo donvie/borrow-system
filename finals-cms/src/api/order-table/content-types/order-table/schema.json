@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "order_tables",
+  "info": {
+    "singularName": "order-table",
+    "pluralName": "order-tables",
+    "displayName": "OrderTable"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "order_id": {
+      "type": "string"
+    },
+    "order_date": {
+      "type": "string"
+    },
+    "order_detail_id": {
+      "type": "string"
+    },
+    "order_quantity": {
+      "type": "integer"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "product_id": {
+      "type": "string"
+    }
+  }
+}

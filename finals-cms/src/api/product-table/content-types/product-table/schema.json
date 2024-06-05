@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_tables",
+  "info": {
+    "singularName": "product-table",
+    "pluralName": "product-tables",
+    "displayName": "ProductTable"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "product_id": {
+      "type": "string"
+    },
+    "product_code": {
+      "type": "string"
+    },
+    "barcode": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_description": {
+      "type": "string"
+    },
+    "product_category": {
+      "type": "string"
+    },
+    "product_quantity": {
+      "type": "integer"
+    }
+  }
+}

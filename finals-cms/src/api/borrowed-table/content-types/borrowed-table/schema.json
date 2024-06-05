@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "borrowed_tables",
+  "info": {
+    "singularName": "borrowed-table",
+    "pluralName": "borrowed-tables",
+    "displayName": "BorrowedTable",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "product_table": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-table.product-table"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "remarks": {
+      "type": "text"
+    },
+    "dateReturned": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "timeReleased": {
+      "type": "string"
+    },
+    "dateReleased": {
+      "type": "string"
+    },
+    "timeReturned": {
+      "type": "string"
+    },
+    "room": {
+      "type": "string"
+    }
+  }
+}
