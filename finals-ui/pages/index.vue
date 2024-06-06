@@ -455,7 +455,7 @@ export default {
     },
     getProductList() {
       this.$axios
-        .get("/api/product-tables")
+        .get("/api/product-tables?pagination[limit]=5000")
         .then((response) => {
           this.productList = response.data.data;
         })

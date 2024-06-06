@@ -547,9 +547,9 @@ export default {
     declinedDashboard () {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
-        url = `/api/borrowed-tables?filters[status][$eq]=Declined&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Declined&populate=*&sort=updatedAt:desc`
       } else {
-        url = `/api/borrowed-tables?filters[status][$eq]=Declined&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Declined&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
       }
 
       this.$axios.get(url).then((response) => {
@@ -562,9 +562,9 @@ export default {
     releaseDashboard () {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
-        url = `/api/borrowed-tables?filters[status][$eq]=Released&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Released&populate=*&sort=updatedAt:desc`
       } else {
-        url = `/api/borrowed-tables?filters[status][$eq]=Released&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Released&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
       }
 
       this.$axios.get(url).then((response) => {
@@ -577,9 +577,9 @@ export default {
     returnDashboard () {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
-        url = `/api/borrowed-tables?filters[status][$eq]=Returned&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Returned&populate=*&sort=updatedAt:desc`
       } else {
-        url = `/api/borrowed-tables?filters[status][$eq]=Returned&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Returned&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
       }
 
       this.$axios.get(url).then((response) => {
@@ -592,9 +592,9 @@ export default {
     pendingDashboard() {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
-        url = `/api/borrowed-tables?filters[status][$eq]=Pending&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Pending&populate=*&sort=updatedAt:desc`
       } else {
-        url = `/api/borrowed-tables?filters[status][$eq]=Pending&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=Pending&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
       }
 
       this.$axios.get(url).then((response) => {
@@ -607,9 +607,9 @@ export default {
     allDashboard () {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
-        url = `/api/borrowed-tables?populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&populate=*&sort=updatedAt:desc`
       } else {
-        url = `/api/borrowed-tables?filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
       }
 
       this.$axios.get(url).then((response) => {
@@ -622,9 +622,9 @@ export default {
     getProductList() {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
-        url = `/api/borrowed-tables?populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&populate=*&sort=updatedAt:desc`
       } else {
-        url = `/api/borrowed-tables?filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
+        url = `/api/borrowed-tables?pagination[limit]=5000&filters[user][id][$eq]=${this.$auth.user.id}&populate=*&sort=updatedAt:desc`
       }
 
       this.$axios.get(url).then((response) => {
@@ -672,15 +672,15 @@ export default {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {
         if (this.status === 'All') {
-          url = `/api/borrowed-tables?populate=*`
+          url = `/api/borrowed-tables?pagination[limit]=5000&populate=*`
         } else {
-          url = `/api/borrowed-tables?filters[status][$eq]=${this.status}&populate=*`
+          url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=${this.status}&populate=*`
         }
       } else {
         if (this.status === 'All') {
-          url = `/api/borrowed-tables?filters[user][id][$eq]=${this.$auth.user.id}&populate=*`
+          url = `/api/borrowed-tables?pagination[limit]=5000&filters[user][id][$eq]=${this.$auth.user.id}&populate=*`
         } else {
-          url = `/api/borrowed-tables?filters[status][$eq]=${this.status}&filters[user][id][$eq]=${this.$auth.user.id}&populate=*`
+          url = `/api/borrowed-tables?pagination[limit]=5000&filters[status][$eq]=${this.status}&filters[user][id][$eq]=${this.$auth.user.id}&populate=*`
         }
       }
       this.$axios
