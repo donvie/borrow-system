@@ -923,6 +923,10 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     department: Attribute.String;
     user_role: Attribute.String;
     schoolId: Attribute.String;
+    firstName: Attribute.String;
+    middleName: Attribute.String;
+    lastName: Attribute.String;
+    suffixName: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

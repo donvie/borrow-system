@@ -79,6 +79,18 @@
     },
     "schoolId": {
       "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "middleName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "suffixName": {
+      "type": "string"
     }
   }
 }

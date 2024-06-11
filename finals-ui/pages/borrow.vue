@@ -105,13 +105,15 @@
             <v-card-text>
               <v-data-table :items="productList" :headers="headers" :search="search">
                 <template v-slot:item.actions="{ item }">
-                  <v-icon
-                    small
-                    class="mr-2"
-                    @click="assetDetail = item; dialog = true"
-                  >
-                    mdi-eye
-                  </v-icon>
+                  <div @click="assetDetail = item; dialog = true">
+                    View
+                    <v-icon
+                      small
+                      class="mr-2"
+                    >
+                      mdi-eye
+                    </v-icon>
+                  </div>
                 </template>
               </v-data-table>
             </v-card-text>
@@ -215,7 +217,7 @@
                   ></v-img>
                   <v-text-field
                     label="Name"
-                    :value="assetDetail.user.name"
+                    :value="assetDetail.user.firstName + ' '+ assetDetail.user.lastName"
                     readonly
                   ></v-text-field>
                   <v-text-field
@@ -375,6 +377,7 @@
               </template>
               <v-date-picker
                 v-model="date"
+                :min="getCurrentDate()"
                 no-title
                 scrollable
               >
@@ -496,7 +499,7 @@ export default {
           text: "Name",
           align: "start",
           sortable: false,
-          value: "user.name",
+          value: "user.firstName",
         },
         {
           text: "Item Name",
@@ -544,6 +547,13 @@ export default {
     this.declinedDashboard()
   },
   methods: {
+    getCurrentDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
     declinedDashboard () {
       let url = ''
       if(this.$auth.user.user_role === 'admin') {

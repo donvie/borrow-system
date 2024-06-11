@@ -26,40 +26,45 @@
             <v-card-text>
               <v-data-table :items="productList" :headers="headers" :search="search">
                 <template v-slot:item.actions="{ item }">
-                  <v-icon
-                    small
-                    v-if="$auth.user.user_role === 'admin'"
-                    class="mr-2"
-                    color="blue"
-                    @click="assetDetail = item; qrDialog = true; generateQRCode()"
-                  >
-                    mdi-qrcode
-                  </v-icon>
-                  <v-icon
-                    small
-                    v-if="$auth.user.user_role === 'admin'"
-                    class="mr-2"
-                    color="blue"
-                    @click="action = 'edit'; assetDetail = item; dialog = true"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                  <v-icon
-                    small
-                    class="mr-2"
-                    v-if="$auth.user.user_role === 'admin'"
-                    color="red"
-                    @click="assetDetail = item; deleteProduct()"
-                  >
-                    mdi-delete
-                  </v-icon>
-                  <v-icon
-                    small
-                    class="mr-2"
-                    @click="action='view'; assetDetail = item; dialog = true"
-                  >
-                    mdi-eye
-                  </v-icon>
+                  <span v-if="$auth.user.user_role === 'admin'" @click="assetDetail = item; qrDialog = true; generateQRCode()">
+                    Qrcode
+                    <v-icon
+                      small
+                      class="mr-2"
+                      color="blue"
+                    >
+                      mdi-qrcode
+                    </v-icon>
+                  </span>
+                  <span v-if="$auth.user.user_role === 'admin'" @click="action = 'edit'; assetDetail = item; dialog = true">
+                    Edit
+                    <v-icon
+                      small
+                      class="mr-2"
+                      color="blue"
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </span>
+                  <span v-if="$auth.user.user_role === 'admin'" @click="assetDetail = item; deleteProduct()">
+                    Delete
+                    <v-icon
+                      small
+                      class="mr-2"
+                      color="red"
+                    >
+                      mdi-delete
+                    </v-icon>
+                  </span>
+                  <span @click="action='view'; assetDetail = item; dialog = true">
+                    View
+                    <v-icon
+                      small
+                      class="mr-2"
+                    >
+                      mdi-eye
+                    </v-icon>
+                  </span>
                 </template>
               </v-data-table>
             </v-card-text>
@@ -80,9 +85,10 @@
 
           <v-card-text>
             <v-text-field
+              v-if="action !== 'add'"
               label="Code"
               v-model="assetDetail.product_code"
-              :readonly="action === 'view'"
+              readonly
             ></v-text-field>
             <v-text-field
               label="Name"
@@ -94,11 +100,18 @@
               v-model="assetDetail.product_description"
               :readonly="action === 'view'"
             ></v-text-field>
-            <v-text-field
+            <v-combobox
+              v-model="assetDetail.product_category"
+              :items="[
+                'Tools', 'materials', 'equipment'
+              ]"
+              label="Category"
+            ></v-combobox>
+            <!-- <v-text-field
               label="Category"
               v-model="assetDetail.product_category"
               :readonly="action === 'view'"
-            ></v-text-field>
+            ></v-text-field> -->
             <v-text-field
               label="Available Quantity"
               v-model="assetDetail.product_quantity"
@@ -168,7 +181,7 @@
             ></v-checkbox>
             <v-spacer></v-spacer>
             <v-btn
-              :disabled="!checkbox"
+              :disabled="!checkbox || quantity > assetDetail.product_quantity"
               color="primary"
               text
               @click="submit()"
@@ -432,7 +445,8 @@ export default {
     addProduct() {
       let payload = {
         data: {
-          product_code: this.assetDetail.product_code,
+          // product_code: this.assetDetail.product_code,
+          product_code: Math.floor(Math.random() * 1000000000),
           product_name: this.assetDetail.product_name,
           product_description: this.assetDetail.product_description,
           product_category: this.assetDetail.product_category,

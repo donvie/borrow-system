@@ -14,36 +14,80 @@
             required
           ></v-text-field>
           <v-text-field
-            v-model="name"
-            :rules="[(v) => !!v || 'Name is required']"
-            label="Name"
+            v-model="firstName"
+            :rules="[(v) => !!v || 'First Name is required']"
+            label="First Name"
             prepend-inner-icon="mdi-account"
             outlined
             required
           ></v-text-field>
           <v-text-field
-            v-model="department"
+            v-model="middleName"
+            :rules="[(v) => !!v || 'Middle Name is required']"
+            label="Middle Name"
+            prepend-inner-icon="mdi-account"
+            outlined
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="lastName"
+            :rules="[(v) => !!v || 'Last Name is required']"
+            label="Last Name"
+            prepend-inner-icon="mdi-account"
+            outlined
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="suffixName"
+            :rules="[(v) => !!v || 'Suffix Name is required']"
+            label="Suffix Name"
+            prepend-inner-icon="mdi-account"
+            outlined
+            required
+          ></v-text-field>
+          <v-select
             :rules="[(v) => !!v || 'Department is required']"
-            label="Department"
+            :items="[
+              'IT DEPT', 'COMPUTER ENG DEPT', 'BA DEPT', 'CRIMINOLOGY DEPT', 'CS DEPARTMENT', 'HOSPITALITY DEPT'
+            ]"
+            density="compact"
             prepend-inner-icon="mdi-account"
+            v-model="department"
             outlined
             required
-          ></v-text-field>
-          <v-text-field
+            label="Department"
+          ></v-select>
+          <!-- <v-text-field
+            label="Department"
+            outlined
+            required
+          ></v-text-field> -->
+          <!-- <v-text-field
             v-model="course"
             :rules="[(v) => !!v || 'Course is required']"
             label="Course"
             prepend-inner-icon="mdi-account"
             outlined
             required
-          ></v-text-field>
+          ></v-text-field> -->
+          <v-select
+            v-model="course"
+            :rules="[(v) => !!v || 'Course is required']"
+            :items="[
+              'BSBA', 'DIT', 'BSCRIM', 'CPE', 'IT', 'BSHM', 'DHMT', 'DCPE'
+            ]"
+            density="compact"
+            prepend-inner-icon="mdi-account"
+            outlined
+            required
+            label="Course"
+          ></v-select>
           <v-file-input
-          
             prepend-icon=""
             prepend-inner-icon="mdi-account"
-            accept="image/*"
             label="School ID"
             outlined
+            accept="image/png, image/jpeg, image/bmp"
             v-model="file"
             :rules="fileRules"
           ></v-file-input>
@@ -96,7 +140,10 @@ export default {
     return {
       valid: true,
       snackbar: false,
-      name: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      suffixName: "",
       username: "",
       department: "",
       course: "",
@@ -136,7 +183,10 @@ export default {
             password: this.password,
             department: this.department,
             course: this.course,
-            name: this.name,
+            firstName: this.firstName,
+            middleName: this.middleName,
+            lastName: this.lastName,
+            suffixName: this.suffixName,
             user_role: 'user',
             schoolId: fileUrl
           });
