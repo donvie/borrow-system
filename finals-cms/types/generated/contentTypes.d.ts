@@ -362,154 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiBorrowedTableBorrowedTable extends Schema.CollectionType {
-  collectionName: 'borrowed_tables';
-  info: {
-    singularName: 'borrowed-table';
-    pluralName: 'borrowed-tables';
-    displayName: 'BorrowedTable';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    product_table: Attribute.Relation<
-      'api::borrowed-table.borrowed-table',
-      'oneToOne',
-      'api::product-table.product-table'
-    >;
-    quantity: Attribute.Integer;
-    remarks: Attribute.Text;
-    dateReturned: Attribute.String;
-    status: Attribute.String;
-    user: Attribute.Relation<
-      'api::borrowed-table.borrowed-table',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    timeReleased: Attribute.String;
-    dateReleased: Attribute.String;
-    timeReturned: Attribute.String;
-    room: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::borrowed-table.borrowed-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::borrowed-table.borrowed-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCustomerTableCustomerTable extends Schema.CollectionType {
-  collectionName: 'customer_tables';
-  info: {
-    singularName: 'customer-table';
-    pluralName: 'customer-tables';
-    displayName: 'user_table';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    user_id: Attribute.String;
-    user_name: Attribute.String;
-    customer_address: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::customer-table.customer-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::customer-table.customer-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiOrderTableOrderTable extends Schema.CollectionType {
-  collectionName: 'order_tables';
-  info: {
-    singularName: 'order-table';
-    pluralName: 'order-tables';
-    displayName: 'OrderTable';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    order_id: Attribute.String;
-    order_date: Attribute.String;
-    order_detail_id: Attribute.String;
-    order_quantity: Attribute.Integer;
-    customer_id: Attribute.String;
-    product_id: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::order-table.order-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::order-table.order-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiProductTableProductTable extends Schema.CollectionType {
-  collectionName: 'product_tables';
-  info: {
-    singularName: 'product-table';
-    pluralName: 'product-tables';
-    displayName: 'ProductTable';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    product_id: Attribute.String;
-    product_code: Attribute.String;
-    barcode: Attribute.String;
-    product_name: Attribute.String;
-    product_description: Attribute.String;
-    product_category: Attribute.String;
-    product_quantity: Attribute.Integer;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::product-table.product-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::product-table.product-table',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -944,6 +796,154 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiBorrowedTableBorrowedTable extends Schema.CollectionType {
+  collectionName: 'borrowed_tables';
+  info: {
+    singularName: 'borrowed-table';
+    pluralName: 'borrowed-tables';
+    displayName: 'BorrowedTable';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    product_table: Attribute.Relation<
+      'api::borrowed-table.borrowed-table',
+      'oneToOne',
+      'api::product-table.product-table'
+    >;
+    quantity: Attribute.Integer;
+    remarks: Attribute.Text;
+    dateReturned: Attribute.String;
+    status: Attribute.String;
+    user: Attribute.Relation<
+      'api::borrowed-table.borrowed-table',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    timeReleased: Attribute.String;
+    dateReleased: Attribute.String;
+    timeReturned: Attribute.String;
+    room: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::borrowed-table.borrowed-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::borrowed-table.borrowed-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCustomerTableCustomerTable extends Schema.CollectionType {
+  collectionName: 'customer_tables';
+  info: {
+    singularName: 'customer-table';
+    pluralName: 'customer-tables';
+    displayName: 'user_table';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    user_id: Attribute.String;
+    user_name: Attribute.String;
+    customer_address: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::customer-table.customer-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::customer-table.customer-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOrderTableOrderTable extends Schema.CollectionType {
+  collectionName: 'order_tables';
+  info: {
+    singularName: 'order-table';
+    pluralName: 'order-tables';
+    displayName: 'OrderTable';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    order_id: Attribute.String;
+    order_date: Attribute.String;
+    order_detail_id: Attribute.String;
+    order_quantity: Attribute.Integer;
+    customer_id: Attribute.String;
+    product_id: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order-table.order-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order-table.order-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductTableProductTable extends Schema.CollectionType {
+  collectionName: 'product_tables';
+  info: {
+    singularName: 'product-table';
+    pluralName: 'product-tables';
+    displayName: 'ProductTable';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    product_id: Attribute.String;
+    product_code: Attribute.String;
+    barcode: Attribute.String;
+    product_name: Attribute.String;
+    product_description: Attribute.String;
+    product_category: Attribute.String;
+    product_quantity: Attribute.Integer;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product-table.product-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product-table.product-table',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -954,10 +954,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::borrowed-table.borrowed-table': ApiBorrowedTableBorrowedTable;
-      'api::customer-table.customer-table': ApiCustomerTableCustomerTable;
-      'api::order-table.order-table': ApiOrderTableOrderTable;
-      'api::product-table.product-table': ApiProductTableProductTable;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -966,6 +962,10 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::borrowed-table.borrowed-table': ApiBorrowedTableBorrowedTable;
+      'api::customer-table.customer-table': ApiCustomerTableCustomerTable;
+      'api::order-table.order-table': ApiOrderTableOrderTable;
+      'api::product-table.product-table': ApiProductTableProductTable;
     }
   }
 }
