@@ -105,7 +105,7 @@
             <v-card-text>
               <v-data-table :items="productList" :headers="headers" :search="search">
                 <template v-slot:item.actions="{ item }">
-                  <div @click="assetDetail = item; dialog = true">
+                  <!-- <div @click="assetDetail = item; dialog = true">
                     View
                     <v-icon
                       small
@@ -113,6 +113,43 @@
                     >
                       mdi-eye
                     </v-icon>
+                  </div> -->
+                  <div v-if="$auth.user.user_role === 'admin'">
+                    <v-btn
+                      color="primary"
+                      text
+                      small
+                      @click="assetDetail = item; dialog = true"
+                    >
+                      View
+                    </v-btn>
+                    <v-btn
+                      small
+                      :disabled="item.status === 'Released' || item.status === 'Returned' || item.status === 'Declined'"
+                      color="primary"
+                      text
+                      @click="dialog2 = true"
+                    >
+                      Decline
+                    </v-btn>
+                    <v-btn
+                      color="primary"
+                      small
+                      :disabled="item.status !== 'Pending' || item.status === 'Released'"
+                      text
+                      @click="action= 'Release'; dialog3 = true"
+                    >
+                      Release
+                    </v-btn>
+                    <v-btn
+                      small
+                      color="primary"
+                      :disabled="item.status !== 'Released'"
+                      text
+                      @click="action= 'Return'; dialog3 = true"
+                    >
+                      Return
+                    </v-btn>
                   </div>
                 </template>
               </v-data-table>
@@ -140,9 +177,9 @@
           >
             <v-tabs-slider></v-tabs-slider>
 
-            <v-tab href="#tab-1">
+            <!-- <v-tab href="#tab-1">
               Details
-            </v-tab>
+            </v-tab> -->
 
             <v-tab href="#tab-2">
               Student details
@@ -242,7 +279,7 @@
 
           <v-divider></v-divider>
 
-          <v-card-actions v-if="$auth.user.user_role === 'admin'">
+          <!-- <v-card-actions v-if="$auth.user.user_role === 'admin'">
             <v-spacer></v-spacer>
             <v-btn
               :disabled="assetDetail.status === 'Released' || assetDetail.status === 'Returned' || assetDetail.status === 'Declined'"
@@ -268,7 +305,7 @@
             >
               Return
             </v-btn>
-          </v-card-actions>
+          </v-card-actions> -->
         </v-card>
       </v-dialog>
 
@@ -472,7 +509,7 @@ export default {
       release: 0,
       returned: 0,
       snackbar: false,
-      tab: 'tab-1',
+      tab: 'tab-2',
       assetDetail: {},
       dialog: false,
       dialog1: false,

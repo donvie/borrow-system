@@ -30,9 +30,14 @@
 
       <div class="hr-sect mx-15 my-5">or sign in with</div>
 
-      <v-card-actions class="mb-10 text-center">
+      <v-card-actions class="text-center">
         <v-spacer></v-spacer>
           <NuxtLink to="/auth/register" class="nuxt-link">Create an account</NuxtLink>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+      <v-card-actions class="mb-10 text-center">
+        <v-spacer></v-spacer>
+          <NuxtLink to="/auth/forgot" class="nuxt-link">Forgot password</NuxtLink>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
